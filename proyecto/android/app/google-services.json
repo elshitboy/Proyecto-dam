@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "73785627030",
+    "project_id": "dam-practica-f1597",
+    "storage_bucket": "dam-practica-f1597.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73785627030:android:266d356922c40c9459cdb7",
+        "android_client_info": {
+          "package_name": "cl.usm.flutter_firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1ujkbqn4pDJ_wEnhYErIfOlZfakkcwKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73785627030:android:964a0baa0aa4d19159cdb7",
+        "android_client_info": {
+          "package_name": "com.example.proyecto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1ujkbqn4pDJ_wEnhYErIfOlZfakkcwKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
