@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto/pages/detalle_evento.dart';
 import 'package:proyecto/pages/eventos_tile.dart';
 import 'package:proyecto/services/fb_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,36 +17,33 @@ class _ListarEventosState extends State<ListarEventos> {
     return Container(
       padding: EdgeInsets.all(5),
       child: StreamBuilder(
-        stream: FsService().eventos(), 
+        stream: FsService().eventos(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData ||
+              snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(
-              color: Color(0xFF00838F),
-              ),
+              child: CircularProgressIndicator(color: Color(0xFF00838F)),
             );
           }
 
           return ListView.separated(
             separatorBuilder: (context, index) => Divider(),
-            itemCount: snapshot.data!.docs.length,            
+            itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               var evento = snapshot.data!.docs[index];
               return EventoListTile(
                 evento: evento,
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Simulación: Detalle de evento')
-                    )
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DetalleEvento()),
                   );
                 },
-              ); 
+              );
             },
           );
-        }
-      )
+        },
+      ),
     );
   }
 }
-
