@@ -13,4 +13,11 @@ class FsService {
         .doc(categoriaId)
         .get();
   }
+
+  Future<void> borrarCategoriaPorId(String categoriaId) {
+    return FirebaseFirestore.instance
+        .collection('categorias')
+        .doc(categoriaId)
+        .delete();
+  }
 }
