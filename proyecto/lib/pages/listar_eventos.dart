@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:proyecto/pages/detalle_evento.dart';
 import 'package:proyecto/pages/eventos_tile.dart';
 import 'package:proyecto/services/fb_services.dart';
@@ -31,14 +32,54 @@ class _ListarEventosState extends State<ListarEventos> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               var evento = snapshot.data!.docs[index];
-              return EventoListTile(
-                evento: evento,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DetalleEvento()),
+              return Dismissible(
+                key: Key(evento.id),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  color: Color(0xFFFF2020),
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.all(13),
+                  child: Icon(MdiIcons.trashCan, color: Color(0xFFFFFFFF)),
+                ),
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Confirmar eliminación"),
+                      content: Text(
+                        "¿Estás seguro de que deseas eliminar este evento?",
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: Text("Cancelar"),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: Text("Eliminar"),
+                        ),
+                      ],
+                    ),
                   );
                 },
+                onDismissed: (direction) async {
+                  await FsService().borrarEventoPorId(evento.id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${evento['titulo']} eliminado'),
+                      backgroundColor: Color(0xFF00838F),
+                    ),
+                  );
+                },
+                child: EventoListTile(
+                  evento: evento,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DetalleEvento()),
+                    );
+                  },
+                ),
               );
             },
           );
