@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:proyecto/services/fb_services.dart';
 
 class DetalleEvento extends StatelessWidget {
-  const DetalleEvento({super.key});
+  final String eventoId;
+
+  const DetalleEvento({super.key, required this.eventoId});
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +25,19 @@ class DetalleEvento extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        stream: FsService().eventos(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        stream: FirebaseFirestore.instance
+            .collection('eventos')
+            .doc(eventoId)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (!snapshot.hasData ||
               snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(color: Color(0xFF00838F)),
             );
           }
-          var evento = snapshot.data!.docs[0];
-          var data = evento.data() as Map<String, dynamic>;
+          var data = snapshot.data!.data() as Map<String, dynamic>;
+
           var fechaHora = (data['fechaHora'] as Timestamp).toDate();
           String fecha = DateFormat('dd/MM/yyyy').format(fechaHora);
           String hora = DateFormat('HH:mm').format(fechaHora);

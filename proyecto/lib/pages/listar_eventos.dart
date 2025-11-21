@@ -76,7 +76,10 @@ class _ListarEventosState extends State<ListarEventos> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DetalleEvento()),
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DetalleEvento(eventoId: evento.id),
+                      ),
                     );
                   },
                 ),
