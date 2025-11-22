@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:proyecto/pages/agregar_producto.dart';
+import 'package:proyecto/pages/agregar_evento.dart';
 import 'package:proyecto/pages/listar_eventos.dart';
 import 'package:proyecto/widgets/logo_appbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     //     style: TextStyle(fontSize: 18),
     //   ),
     // ),
-    AgregarProducto(),
+    AgregarEvento(),
   ];
 
   void _onItemSelected(int index) {

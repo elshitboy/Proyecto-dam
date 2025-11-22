@@ -16,7 +16,7 @@ class EventoListTile extends StatelessWidget {
     return FutureBuilder(
       future: FsService().categoriaPorId(evento['categoriaId']),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
           return ListTile(title: Text(evento['titulo']), subtitle: Text("Cargando..."));
         }
 
