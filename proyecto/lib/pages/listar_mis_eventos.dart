@@ -24,7 +24,20 @@ class _ListarMisEventosState extends State<ListarMisEventos> {
 
     return RefreshIndicator(
       onRefresh: () => refrescar(),
+      color: Color(0xFFFFFFFF),
       child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFB22222),
+              Color(0xFF00838F),
+              Color(0xFF051E34),
+            ],
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
         padding: EdgeInsets.all(5),
         child: StreamBuilder(
           stream: FsService().eventosUsuarioAct(emailActual!),
@@ -32,14 +45,52 @@ class _ListarMisEventosState extends State<ListarMisEventos> {
             if (!snapshot.hasData ||
                 snapshot.connectionState == ConnectionState.waiting) {
               return Center(
-                child: CircularProgressIndicator(color: Color(0xFF00838F)),
+                child: CircularProgressIndicator(color: Color(0xFFFFFFFF)),
               );
             }
 
             var docs = snapshot.data!.docs;
 
+            if (docs.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      MdiIcons.inbox,
+                      size: 80,
+                      color: Color(0xFFFFFFFF).withValues(alpha: 0.6),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'No tienes eventos registrados',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Crea tu primer evento presionando el botón +',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xFFFFFFFF).withValues(alpha: 0.8),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
             return ListView.separated(
-              separatorBuilder: (context, index) => Divider(),
+              separatorBuilder: (context, index) => Divider(
+                color: Color(0xFFFFFFFF).withValues(alpha: 0.2),
+                thickness: 1,
+                height: 1,
+              ),
+              padding: EdgeInsets.only(bottom: 15),
               itemCount: docs.length,
               itemBuilder: (context, index) {
                 var evento = docs[index];               
@@ -84,7 +135,7 @@ class _ListarMisEventosState extends State<ListarMisEventos> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('${evento['titulo']} eliminado'),
-                        backgroundColor: Color(0xFF00838F),
+                        backgroundColor: Color(0xFFB22222),
                       ),
                     );
                   },

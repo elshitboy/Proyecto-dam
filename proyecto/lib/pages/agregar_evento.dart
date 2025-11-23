@@ -343,7 +343,7 @@ class _AgregarEventoState extends State<AgregarEvento> {
 
   Widget _campoCategoria() {
     return DropdownButtonFormField<String>(
-      value: _categoriaSeleccionada,
+      initialValue: _categoriaSeleccionada,
       items: _categorias!.map((doc) {
         return DropdownMenuItem(
           value: doc.id,

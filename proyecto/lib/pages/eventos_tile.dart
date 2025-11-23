@@ -17,27 +17,78 @@ class EventoListTile extends StatelessWidget {
       future: FsService().categoriaPorId(evento['categoriaId']),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
-          return ListTile(title: Text(evento['titulo']), subtitle: Text("Cargando..."));
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Card(
+              elevation: 0,
+              color: Color(0xFFFFFFFF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ListTile(
+                title: Text(evento['titulo']),
+                subtitle: Text("Cargando..."),
+              ),
+            ),
+          );
         }
 
         var categoria = snapshot.data!;
         DateTime fecha = (evento['fechaHora'] as Timestamp).toDate();
         String fechaFormateada = DateFormat('dd/MM/yyyy HH:mm').format(fecha);
 
-        return ListTile(
-          leading: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.blueAccent, width: 3),
-            ),
-            child: ClipOval(child: Image.asset("assets/images/categorias/${categoria['foto']}", fit: BoxFit.cover)),
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF000000).withValues(alpha: 0.15),
+                blurRadius: 8,
+                offset: Offset(0, 3),
+              ),
+            ],
           ),
-          title: Text(evento['titulo']), 
-          subtitle: Text("${categoria['nombre']} - ${fechaFormateada}"), 
-          trailing: Icon(MdiIcons.chevronRight), 
-          onTap: onTap
+          child: Card(
+            elevation: 0,
+            color: Color(0xFFFFFFFF).withValues(alpha: 0.95),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListTile(
+              leading: Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Color(0xFF00838F), width: 2),
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    "assets/images/categorias/${categoria['foto']}",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              title: Text(
+                evento['titulo'],
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 15,
+                  color: Color(0xFF000000),
+                ),
+              ),
+              subtitle: Text(
+                "${categoria['nombre']} - $fechaFormateada",
+                style: TextStyle(
+                  color: Color(0xFF666666),
+                  fontSize: 13,
+                ),
+              ),
+              trailing: Icon(MdiIcons.chevronRight, color: Color(0xFF00838F), size: 24),
+              onTap: onTap,
+            ),
+          ),
         );
       },
     );
