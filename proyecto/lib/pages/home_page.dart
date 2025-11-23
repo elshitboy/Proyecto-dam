@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:proyecto/pages/agregar_evento.dart';
 import 'package:proyecto/pages/listar_eventos.dart';
+import 'package:proyecto/pages/listar_mis_eventos.dart';
+import 'package:proyecto/pages/agregar_evento.dart';
 import 'package:proyecto/widgets/logo_appbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -15,15 +16,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
+  final List<Widget> _pages = const [
     ListarEventos(),
-    // Center(
-    //   child: Text(
-    //     'Bienvenidos a la pagina de Carlos y Camilo, el inico sera el listar',
-    //     style: TextStyle(fontSize: 18),
-    //   ),
-    // ),
-    AgregarEvento(),
+    ListarMisEventos(),
   ];
 
   void _onItemSelected(int index) {
@@ -36,6 +31,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        final bool isDesktop = constraints.maxWidth >= 800;
+
         return Scaffold(
           appBar: AppBar(
             title: const Text(
@@ -44,7 +41,8 @@ class _HomePageState extends State<HomePage> {
             ),
             leading: const LogoAppbar(),
           ),
-          endDrawer: constraints.maxWidth >= 800
+
+          endDrawer: isDesktop
               ? null
               : Drawer(
                   child: ListView(
@@ -58,12 +56,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Text(
                           'Menú',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
+                          style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 20),
                         ),
                       ),
                       ListTile(
-                        leading: Icon(MdiIcons.homeAnalytics),
-                        title: Text('Inicio'),
+                        leading: Icon(MdiIcons.calendarText),
+                        title: const Text('Eventos'),
                         selected: _selectedIndex == 0,
                         onTap: () {
                           Navigator.pop(context);
@@ -71,8 +69,8 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       ListTile(
-                        leading: Icon(MdiIcons.newBox),
-                        title: Text('Agregar'),
+                        leading: Icon(MdiIcons.accountClock),
+                        title: const Text('Mis eventos'),
                         selected: _selectedIndex == 1,
                         onTap: () {
                           Navigator.pop(context);
@@ -81,39 +79,70 @@ class _HomePageState extends State<HomePage> {
                       ),
                       ListTile(
                         leading: Icon(MdiIcons.logout),
-                        title: const Text('Cerrar Sesion'),
-                        selected: _selectedIndex == 2,
+                        title: const Text('Cerrar Sesión'),
                         onTap: () async {
                           Navigator.pop(context);
                           await FirebaseAuth.instance.signOut();
-                          _onItemSelected(2);
                         },
                       ),
                     ],
                   ),
                 ),
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.only(bottom: 24.0, right: 24.0), // mover arriba e izquierda
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [
+                    Color(0xFF0D47A1), // Azul profundo
+                    Color(0xFF1565C0), // Azul medio
+                    Color(0xFF0277BD), // Cian azulado
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF000000).withValues(alpha: 0.3),
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const AgregarEvento()),
+                        );
+                },
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                child: Icon(Icons.add, color: Color(0xFFFFFFFF), size: 28),
+              ),
+            ),
+          ),
+          
           body: Row(
             children: [
-              if (constraints.maxWidth >= 800)
+              if (isDesktop) 
                 NavigationRail(
                   selectedIndex: _selectedIndex,
                   onDestinationSelected: _onItemSelected,
                   labelType: NavigationRailLabelType.all,
                   destinations: [
                     NavigationRailDestination(
-                      icon: Icon(MdiIcons.homeAnalytics),
-                      label: Text('Inicio'),
+                      icon: Icon(MdiIcons.calendarText),
+                      label: Text('Eventos'),
                     ),
                     NavigationRailDestination(
-                      icon: Icon(MdiIcons.newBox),
-                      label: Text('Agregar'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(MdiIcons.logout),
-                      label: Text('Cerrar Sesion'),
+                      icon: Icon(MdiIcons.accountClock),
+                      label: Text('Mis Eventos'),
                     ),
                   ],
                 ),
+
               Expanded(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),

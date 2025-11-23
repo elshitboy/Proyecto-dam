@@ -44,6 +44,18 @@ class _AgregarEventoState extends State<AgregarEvento> {
       initialDate: DateTime.now(),
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFF00838F),
+              onPrimary: Color(0xFFFFFFFF),
+              onSurface: Color(0xFF000000),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (fechaSeleccionada == null) return;
@@ -51,6 +63,18 @@ class _AgregarEventoState extends State<AgregarEvento> {
     final TimeOfDay? horaSeleccionada = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFF00838F),
+              onPrimary: Color(0xFFFFFFFF),
+              onSurface: Color(0xFF000000),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (horaSeleccionada == null) return;
@@ -65,8 +89,7 @@ class _AgregarEventoState extends State<AgregarEvento> {
 
     setState(() {
       _fechaHoraReal = fechaFinal;
-      _fechaHoraController.text =
-          DateFormat('dd/MM/yyyy HH:mm').format(fechaFinal);
+      _fechaHoraController.text = DateFormat('dd/MM/yyyy HH:mm').format(fechaFinal);
     });
   }
 
@@ -81,54 +104,155 @@ class _AgregarEventoState extends State<AgregarEvento> {
   @override
   Widget build(BuildContext context) {
     if (_cargandoCategorias) {
-      return Center(
-        child: CircularProgressIndicator(color: Color(0xFF00838F)),
+      return Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color(0xFF0D47A1), // Azul profundo
+            Color(0xFF1565C0), // Azul medio
+            Color(0xFF0277BD), // Cian azulado
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: Center(child: CircularProgressIndicator(color: Color(0xFFFFFFFF)))
       );
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFB22222), Color(0xFF051E34)],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(70),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF0D47A1),
+                Color(0xFF1565C0),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF0D47A1).withValues(alpha:0.4),
+                blurRadius: 16,
+                offset: Offset(0, 8),
+                spreadRadius: 2,
+              ),
+              BoxShadow(
+                color: Color(0xFF000000).withValues(alpha:0.1),
+                blurRadius: 8,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Row(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFFFFFFF).withValues(alpha:0.15),
+                  ),
+                  child: Icon(MdiIcons.calendarPlus, color: Color(0xFFFFFFFF), size: 24),
+                ),
+                SizedBox(width: 12),
+                Text(
+                  'Nuevo Evento',
+                  style: TextStyle(
+                    color: Color(0xFFFFFFFF),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ],
+            ),
+            leading: Container(
+              margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFFFFFFFF).withValues(alpha:0.15),
+              ),
+              child: IconButton(
+                icon: Icon(MdiIcons.arrowLeft, color: Color(0xFFFFFFFF), size: 24),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
+            centerTitle: false,
+          ),
         ),
       ),
-      child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 760),
-            child: Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _header(),
-
-                      const SizedBox(height: 12),
-
-                      _campoTitulo(),
-                      const SizedBox(height: 16),
-
-                      _campoFechaHora(context),
-                      const SizedBox(height: 16),
-
-                      _campoLugar(),
-                      const SizedBox(height: 16),
-
-                      _campoCategoria(),
-                      const SizedBox(height: 24),
-
-                      _botonGuardar(context),
-                    ],
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF0D47A1), // Azul profundo
+              Color(0xFF1565C0), // Azul medio
+              Color(0xFF0277BD), // Cian azulado
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 760),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xFF000000).withValues(alpha:0.35),
+                      blurRadius: 24,
+                      offset: Offset(0, 12),
+                      spreadRadius: 2,
+                    ),
+                    BoxShadow(
+                      color: Color(0xFF0D47A1).withValues(alpha:0.15),
+                      blurRadius: 16,
+                      offset: Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: Card(
+                  elevation: 0,
+                  color: Color(0xFFFFFFFF).withValues(alpha:0.98),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          _header(),
+                          SizedBox(height: 20),
+                          _campoTitulo(),
+                          SizedBox(height: 18),
+                          _campoFechaHora(context),
+                          SizedBox(height: 18),
+                          _campoLugar(),
+                          SizedBox(height: 18),
+                          _campoCategoria(),
+                          SizedBox(height: 30),
+                          _botonGuardar(context),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -140,34 +264,48 @@ class _AgregarEventoState extends State<AgregarEvento> {
   }
 
   Widget _header() {
-    return Row(
+    return Column(
       children: [
-        Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [Color(0xFF051E34), Color(0xFF00838F)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black,
-                blurRadius: 8,
-                offset: Offset(0, 4),
+        Row(
+          children: [
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [Color(0xFF1565C0), Color(0xFF42A5F5)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF1565C0).withValues(alpha:0.4),
+                    blurRadius: 16,
+                    offset: Offset(0, 6),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Icon(MdiIcons.plusBox, color: Colors.white, size: 30),
+              child: Icon(MdiIcons.plusBox, color: Color(0xFFFFFFFF), size: 30),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                "Registrar Nuevo Evento",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF0D47A1),
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ],
         ),
-        SizedBox(width: 12),
-        Expanded(
-          child: Text(
-            "Nuevo Evento",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-          ),
+        SizedBox(height: 16),
+        Divider(
+          color: Color(0xFF1565C0).withValues(alpha:0.2),
+          thickness: 1.5,
         ),
       ],
     );
@@ -176,15 +314,7 @@ class _AgregarEventoState extends State<AgregarEvento> {
   Widget _campoTitulo() {
     return TextFormField(
       controller: _tituloController,
-      decoration: InputDecoration(
-        labelText: "Título",
-        prefixIcon: Icon(MdiIcons.text),
-        filled: true,
-        fillColor: Colors.grey.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
+      decoration: _inputEstilo("Título", MdiIcons.text),
       validator: (value) =>
           value == null || value.isEmpty ? "Ingrese un título" : null,
     );
@@ -195,16 +325,8 @@ class _AgregarEventoState extends State<AgregarEvento> {
       controller: _fechaHoraController,
       readOnly: true,
       onTap: () => _seleccionarFechaHora(context),
-      decoration: InputDecoration(
-        labelText: "Fecha y hora",
-        prefixIcon: Icon(MdiIcons.calendarClock),
-        suffixIcon: Icon(Icons.keyboard_arrow_down),
-        filled: true,
-        fillColor: Colors.grey.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
+      decoration: _inputEstilo("Fecha y hora", MdiIcons.calendarClock,
+          suffix: Icon(Icons.keyboard_arrow_down)),
       validator: (value) =>
           value == null || value.isEmpty ? "Seleccione fecha y hora" : null,
     );
@@ -213,15 +335,7 @@ class _AgregarEventoState extends State<AgregarEvento> {
   Widget _campoLugar() {
     return TextFormField(
       controller: _lugarController,
-      decoration: InputDecoration(
-        labelText: "Lugar",
-        prefixIcon: Icon(MdiIcons.mapMarker),
-        filled: true,
-        fillColor: Colors.grey.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
+      decoration: _inputEstilo("Lugar", MdiIcons.mapMarker),
       validator: (value) =>
           value == null || value.isEmpty ? "Ingrese el lugar" : null,
     );
@@ -233,25 +347,40 @@ class _AgregarEventoState extends State<AgregarEvento> {
       items: _categorias!.map((doc) {
         return DropdownMenuItem(
           value: doc.id,
-          child: Text(doc['nombre']),
+          child: Text(doc['nombre'], style: TextStyle(fontSize: 16)),
         );
       }).toList(),
-      onChanged: (valor) {
-        setState(() {
-          _categoriaSeleccionada = valor;
-        });
-      },
-      decoration: InputDecoration(
-        labelText: "Categoría",
-        prefixIcon: Icon(MdiIcons.tag),
-        filled: true,
-        fillColor: Colors.grey.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+      onChanged: (valor) => setState(() => _categoriaSeleccionada = valor),
+      decoration: _inputEstilo("Categoría", MdiIcons.tag),
+      validator: (value) => value == null ? "Seleccione una categoría" : null,
+    );
+  }
+
+  InputDecoration _inputEstilo(String label, IconData icon, {Widget? suffix}) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: Color(0xFF1565C0)),
+      suffixIcon: suffix,
+      filled: true,
+      fillColor: Color(0xFFF8FBFF),
+      labelStyle: TextStyle(
+        color: Color(0xFF455A64),
+        fontWeight: FontWeight.w500,
       ),
-      validator: (value) =>
-          value == null ? "Seleccione una categoría" : null,
+      hintStyle: TextStyle(color: Color(0xFFB0BEC5)),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Color(0xFFE3F2FD), width: 1.5),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Color(0xFFE3F2FD), width: 1.5),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: Color(0xFF1565C0), width: 2.5),
+      ),
+      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
     );
   }
 
@@ -261,11 +390,19 @@ class _AgregarEventoState extends State<AgregarEvento> {
       child: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00838F), Color(0xFFB22222)],
+            colors: [Color(0xFF1565C0), Color(0xFF42A5F5)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF1565C0).withValues(alpha:0.35),
+              blurRadius: 14,
+              offset: Offset(0, 6),
+              spreadRadius: 1,
+            ),
+          ],
         ),
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
@@ -277,16 +414,17 @@ class _AgregarEventoState extends State<AgregarEvento> {
           onPressed: () async {
             if (!_formKey.currentState!.validate()) return;
 
-            // Guardamos los datos primero en variables locales
-            final titulo = _tituloController.text;
+            final titulo = _tituloController.text.trim();
             final fecha = _fechaHoraReal!;
-            final lugar = _lugarController.text;
-            final categoria = _categoriaSeleccionada!;         
+            final lugar = _lugarController.text.trim();
+            final categoria = _categoriaSeleccionada!;
 
-            // Muestra confirmación inmediata
             showDialog(
               context: context,
               builder: (_) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 title: Text("Evento agregado"),
                 content: Text("El evento fue agregado correctamente."),
                 actions: [
@@ -298,22 +436,16 @@ class _AgregarEventoState extends State<AgregarEvento> {
               ),
             );
 
-            // Limpia el formulario
             _formKey.currentState!.reset();
             _tituloController.clear();
             _fechaHoraController.clear();
             _lugarController.clear();
             _categoriaSeleccionada = null;
-            
-            FsService().agregarEvento(
-              titulo,
-              fecha,
-              lugar,
-              categoria,
-            );
+
+            FsService().agregarEvento(titulo, fecha, lugar, categoria);
           },
-          icon: Icon(MdiIcons.contentSave, color: Colors.white),
-          label: Text("Guardar", style: TextStyle(color: Colors.white)),
+          icon: Icon(MdiIcons.contentSave, color: Color(0xFFFFFFFF)),
+          label: Text("Guardar", style: TextStyle(color:Color(0xFFFFFFFF))),
         ),
       ),
     );

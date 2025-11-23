@@ -6,14 +6,14 @@ import 'package:proyecto/pages/eventos_tile.dart';
 import 'package:proyecto/services/fb_services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ListarEventos extends StatefulWidget {
-  const ListarEventos({super.key});
+class ListarMisEventos extends StatefulWidget {
+  const ListarMisEventos({super.key});
 
   @override
-  State<ListarEventos> createState() => _ListarEventosState();
+  State<ListarMisEventos> createState() => _ListarMisEventosState();
 }
 
-class _ListarEventosState extends State<ListarEventos> {
+class _ListarMisEventosState extends State<ListarMisEventos> {
   Future<void> refrescar() async {
     setState(() {});
   }
@@ -27,7 +27,7 @@ class _ListarEventosState extends State<ListarEventos> {
       child: Container(
         padding: EdgeInsets.all(5),
         child: StreamBuilder(
-          stream: FsService().eventos(),
+          stream: FsService().eventosUsuarioAct(emailActual!),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData ||
                 snapshot.connectionState == ConnectionState.waiting) {
@@ -42,26 +42,8 @@ class _ListarEventosState extends State<ListarEventos> {
               separatorBuilder: (context, index) => Divider(),
               itemCount: docs.length,
               itemBuilder: (context, index) {
-                var evento = docs[index];
-                bool esPropio = evento['autor'] == emailActual;
+                var evento = docs[index];               
 
-                Widget tile = EventoListTile(
-                  evento: evento,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetalleEvento(evento: evento),
-                      ),
-                    );
-                  },
-                );
-
-                if (!esPropio) {
-                  return tile;
-                }
-
-                // Si el evento es del usuario actual → permitir borrar
                 return Dismissible(
                   key: Key(evento.id),
                   direction: DismissDirection.endToStart,
@@ -106,7 +88,17 @@ class _ListarEventosState extends State<ListarEventos> {
                       ),
                     );
                   },
-                  child: tile,
+                  child: EventoListTile(
+                  evento: evento,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetalleEvento(evento: evento),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             );

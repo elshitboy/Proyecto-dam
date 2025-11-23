@@ -5,6 +5,16 @@ class FsService {
   Stream<QuerySnapshot> eventos() {
     return FirebaseFirestore.instance
     .collection('eventos')
+    .orderBy('fechaHora')
+    .snapshots();
+  }
+
+  Stream<QuerySnapshot> eventosUsuarioAct(
+    String autor
+  ) {
+    return FirebaseFirestore.instance
+    .collection('eventos')
+    .where('autor', isEqualTo: autor)
     .snapshots();
   }
 

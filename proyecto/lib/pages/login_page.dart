@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:proyecto/services/google_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -260,14 +261,9 @@ class _LoginPageState extends State<LoginPage> {
                       vertical: 8,
                     ),
                     child: OutlinedButton.icon(
-                      onPressed: () =>
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Simulación: iniciar sesión con Google',
-                              ),
-                            ),
-                          ),
+                      onPressed: () async {
+                        await GoogleAuthService().signInWithGoogle();                        
+                      },
                       icon: Icon(MdiIcons.google, color: Colors.blue.shade600),
                       label: const Text(
                         'Continuar con Google',
