@@ -8,7 +8,7 @@ class LogoAppbar extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8),
       child: Image.asset(
-        'assets/images/Logo.jpg',
+        'assets/images/Logo.png',
         fit: BoxFit.contain,
         scale: 14,
       ),
